@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Project 0 | Becoming Friends with Your Camera</title>
+
+    <style>
+        /*General Page Styling*/ 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Losevka;
+            background-color: #faf8f5;
+            color: #3f3f46;
+            line-height: 1.6;
+        }
+
+        /*Navigation Bar*/
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 25px 8%;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #777;
+            font-size: 14px;
+        }
+
+        nav a:hover {
+            color: #8d7ca8;
+        }
+
+        /*Main Content*/
+        main {
+            max-width: 1000px;
+            margin: auto;
+            padding: 60px 8%;
+        }
+
+        /*Project Headers*/
+        .project-label {
+            color: #b28b9d;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            font-size: clamp(40px, 7vw, 70px);
+            font-weight: 500;
+            line-height: 1.05;
+            margin-bottom: 25px;
+        }
+        
+        .intro {    
+            max-width: 700px;
+            color: #777;
+            font-size: 17px;
+            margin-bottom: 80px;
+        }
+
+        /*Each Project Part*/
+        .part {
+            margin-bottom: 100px;
+        }
+
+        .part-label {  
+            color: #8d7ca8;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 35px;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .description { 
+            color: #666;
+            max-width: 700px;
+            margin-bottom: 35px;
+        }
+
+        /*Image Row*/
+        .image-row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .image-container {
+            flex: 1;
+        }
+
+        .image-container img {
+            width: 100%;
+            display: block;
+            border-radius: 16px;
+        }
+
+        .caption { 
+            margin-top: 10px;   
+            font-size: 13px;
+            color: #888;
+        }
+
+        /*Gif*/
+        .large-image {
+            width: 60%;
+            max-width: 800px;
+            display: block;
+            margin: 30px auto;
+            border-radius: 18px;
+        }
+
+        /*Reflection Box*/
+        .reflection {
+            background-color: #eee8f4;
+            padding: 30px;
+            border-radius: 18px;
+            margin-top: 30px;
+        }
+
+        .reflection h3 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 10px;
+        }
+
+        .reflection p {
+            color: #666;
+        }
+
+        /*Footer*/
+        footer {
+            text-align: center;
+            padding: 35px;
+            font-size: 13px;
+            color: #999;
+        }
+
+        /*Mobile Version*/
+        @media (max-width: 700px) {
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+            nav,
+            .hero,
+            .projects {
+                padding-left: 6%;
+                padding-right: 6%;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav>
+        <!-- Link back to main portfolio -->
+        <a href="../index.html">
+            ← Back to Portfolio
+        </a>
+
+        <span>
+            CS180 · Project 0
+        </span>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Introduction -->
+        <header>
+            <div class="project-label">
+                Project 0
+            </div>
+    
+            <h1>
+                Becoming Friends<br>
+                with Your Camera
+            </h1>
+    
+            <p class="intro">
+                Exploring the relationship between perspective,
+                focal length, zoom and the center of projection
+                through photography.
+            </p>
+        </header>
+
+        <!-- Part 1 -->
+        <section class="part">
+            <div class="part-label">
+                Part 01
+            </div>
+    
+            <h2>
+                Selfie: The Wrong Way vs. The Right Way
+            </h2>
+    
+            <p class="description">
+                For this experiment, I took a close-up photo
+                before stepping back several feet and zooming in
+                to capture the same subject at approximately
+                the same size.
+            </p>
+    
+            <!-- Two photos side by side -->
+            <div class="image-row">
+                <div class="image-container">
+                    <img
+                        src="./media/selfie-close.jpg"
+                        alt="Close-up selfie">
+                    <p class="caption">
+                        Close-up · The wrong way
+                    </p>
+    
+                </div>
+                <div class="image-container">
+                    <img
+                        src="./media/selfie-zoom.jpg"
+                        alt="Selfie taken from farther away using zoom">
+                    <p class="caption">
+                        Stepped back + zoomed in · The right way
+                    </p>
+                </div>
+            </div>
+
+            <!-- Reflection -->
+            <div class="reflection">
+                <h3>
+                    What I noticed
+                </h3>
+
+                <p>
+                    What surprised me most was that the two photos could
+                    have a similar-sized face, but still look noticeably different. 
+                    In the close-up photo, the features closer to the camera appeared 
+                    more exaggerated, especially the nose and centre of the face. 
+                    After stepping back and zooming in, the face looked more natural 
+                    and proportionate.
+
+                    This made me realise that zooming in is not the same as physically
+                    moving closer. Even when the subject takes up roughly the same 
+                    amount of space in the frame, changing the camera’s distance 
+                    changes the perspective of the image.
+                </p>
+            </div>
+        </section>
+
+        <!-- Part 2 -->
+
+        <section class="part">
+            <div class="part-label">
+                Part 02
+            </div>
+
+            <h2>
+                Architectural Perspective Compression
+            </h2>
+
+            <p class="description">
+                I repeated the same idea with an architectural
+                scene, first photographing the building from
+                farther away while zoomed in, then moving closer
+                without zoom.
+            </p>
+
+            <div class="image-row">
+                <div class="image-container">
+                    <img
+                        src="./media/architecture-zoom.jpg"
+                        alt="Building photographed from far away using zoom">
+                
+                    <p class="caption">
+                        Farther away + zoom
+                    </p>
+                </div>
+
+                <div class="image-container">
+                    <img
+                        src="./media/architecture-close.jpg"
+                        alt="Building photographed from closer without zoom">
+                
+                    <p class="caption">
+                        Closer + no zoom
+                    </p>
+                </div>
+            </div>
+
+            <div class="reflection">
+                <h3>
+                    What I noticed
+                </h3>
+
+                <p>
+                    The biggest difference I noticed was how the sense of depth
+                    changed between the two photos. In the zoomed-in photo taken 
+                    from farther away, the building appeared more compressed and 
+                    flatter. When I moved closer without zooming, the different 
+                    parts of the scene appeared to have more separation and depth.
+                    Seeing this side-by-side made the effect much more obvious to 
+                    me than just learning about it conceptually.
+
+                    I realised that changing the camera position can change the 
+                    relationship between objects in a scene, even when the final 
+                    framing looks similar.
+                </p>
+            </div>
+        </section>
+
+        <!-- Part 3 -->
+        <section class="part">
+            <div class="part-label">
+                Part 03
+            </div>
+
+            <h2>
+                The Dolly Zoom
+            </h2>
+
+            <p class="description">
+                For the final experiment, I moved the camera
+                backwards while simultaneously zooming in,
+                keeping the subject approximately the same size
+                in each frame.
+            </p>
+
+            <!-- GIF -->
+            <img
+                class="large-image"
+                src="./media/dolly-zoom.gif"
+                alt="Animated dolly zoom effect">
+            
+            <div class="reflection">
+                <h3>
+                    What I noticed
+                </h3>
+
+                <p>
+                    The most interesting part of this experiment was seeing the 
+                    background change while the subject stayed roughly the same 
+                    size. As I moved backwards and zoomed in, the subject remained 
+                    relatively stable, but the surrounding scene appeared to shift 
+                    and stretch.
+
+                    Taking the individual photos also made me realise how precise 
+                    the camera movement needed to be. Even small changes in distance 
+                    or zoom affected how smoothly the final GIF looked. Seeing the 
+                    effect through my own photos made the idea of a dolly zoom 
+                    much easier to understand than just seeing an example of it in 
+                    a movie.
+                </p>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        © 2026 · CS180 Portfolio
+    </footer>
+
+</body>
+</html>
