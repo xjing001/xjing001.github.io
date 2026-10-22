@@ -123,6 +123,18 @@
             margin-bottom: 30px;
         }
 
+        .image-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .image-column img {
+            width: 300px;
+            height: auto;
+        }
+
         .image-container {
             flex: 1;
         }
@@ -135,11 +147,22 @@
             background-color: #f5f2f7;
         }
 
+        .image-container img.original-image {
+            width: 300px;
+            max-width: 100%;
+            height: auto;
+            margin: 0 auto;
+        }
+
         .caption { 
             margin-top: 10px;   
             font-size: 13px;
             color: #888;
             line-height: 1.4;
+        }
+
+        .original-caption {
+            text-align: center;
         }
 
         .gallery-grid {
@@ -354,47 +377,32 @@
 
             <div class="image-row">
                 <div class="image-container">
-                    <!-- Insert original test image -->
-                    <img src="./assets/INSERT_ORIGINAL_IMAGE.png" alt="Original Clean Image">
-                    <p class="caption"><strong>Original Image</strong> (t = 1.0)</p>
-                </div>
-                <div class="image-container">
-                    <!-- Insert noisy image t=0.25 -->
-                    <img src="./assets/INSERT_NOISY_0.25.png" alt="Noisy Input t=0.25">
-                    <p class="caption">Noisy state at <strong>t = 0.25</strong></p>
-                </div>
-                <div class="image-container">
-                    <!-- Insert noisy image t=0.50 -->
-                    <img src="./assets/INSERT_NOISY_0.50.png" alt="Noisy Input t=0.50">
-                    <p class="caption">Noisy state at <strong>t = 0.50</strong></p>
-                </div>
-                <div class="image-container">
-                    <!-- Insert noisy image t=0.75 -->
-                    <img src="./assets/INSERT_NOISY_0.75.png" alt="Noisy Input t=0.75">
-                    <p class="caption">Noisy state at <strong>t = 0.75</strong></p>
+                    <img src="./media/part_a/training_inputs.png" alt="Training Inputs">
                 </div>
             </div>
 
             <!-- 1.2 -->
             <h3 style="margin-top: 40px;">1.2 Classical Denoising Baseline (Gaussian Blur)</h3>
             <p class="description">
-                As a naive baseline without machine learning, we can rescale the image amplitude by dividing by <code>t</code> and then apply Gaussian smoothing. By sweeping &sigma; &isin; [1, 2, 4, 8, 16], we choose the filter minimizing MSE with the clean image.
+                Before relying on a trained model, I also explored a simple, non-AI approach to denoising. 
+                I first rescaled the noisy image by dividing its pixel values by <code>t</code>, then 
+                applied Gaussian blur to smooth out the remaining noise. I tested different blur strengths, 
+                with <code>sigma = 1,2,4,8,16</code> and compared each result against the original image 
+                using mean squared error (MSE). This gave me a straightforward baseline for seeing how well 
+                a traditional image processing technique could recover the original image.
             </p>
 
-            <div class="image-row">
+            <div class="image-column">
                 <div class="image-container">
-                    <!-- Insert blur t=0.25 -->
-                    <img src="./assets/INSERT_BLUR_0.25.png" alt="Gaussian Denoised t=0.25">
+                    <img src="./media/part_a/blur_0.25.png" alt="Gaussian Denoised t=0.25">
                     <p class="caption">Best blur at <strong>t = 0.25</strong> (high &sigma; removes noise but completely erases structure)</p>
                 </div>
                 <div class="image-container">
-                    <!-- Insert blur t=0.50 -->
-                    <img src="./assets/INSERT_BLUR_0.50.png" alt="Gaussian Denoised t=0.50">
+                    <img src="./media/part_a/blur_0.5.png" alt="Gaussian Denoised t=0.50">
                     <p class="caption">Best blur at <strong>t = 0.50</strong> (blurry details)</p>
                 </div>
                 <div class="image-container">
-                    <!-- Insert blur t=0.75 -->
-                    <img src="./assets/INSERT_BLUR_0.75.png" alt="Gaussian Denoised t=0.75">
+                    <img src="./media/part_a/blur_0.75.png" alt="Gaussian Denoised t=0.75">
                     <p class="caption">Best blur at <strong>t = 0.75</strong> (retains coarse shapes)</p>
                 </div>
             </div>
@@ -402,27 +410,28 @@
             <!-- 1.3 -->
             <h3 style="margin-top: 40px;">1.3 One-Step Denoising with Flow Predictions</h3>
             <p class="description">
-                Using PixNerd-XXL, we query the predicted velocity <code>v<sub>&theta;</sub>(x<sub>t</sub>, t, c)</code> conditioned on "a high quality photo" and project straight forward to the endpoint:
+                Using PixNerd-XXL, I explored how a pretrained flow model could recover a clean image 
+                in a single step. Given a noisy image, the model predicts the velocity 
+                <code>v<sub>&theta;</sub>(x<sub>t</sub>, t, c)</code>, guided by the prompt “a high 
+                quality photo”. I used this predicted velocity to project directly to the clean endpoint, 
+                allowing me to see how well the model could reconstruct the image in one shot.
             </p>
 
             <div class="equation">
                 x̂<sub>1</sub> = x<sub>t</sub> + (1 - t) v<sub>&theta;</sub>(x<sub>t</sub>, t, c)
             </div>
 
-            <div class="image-row">
+            <div class="image-column">
                 <div class="image-container">
-                    <!-- Insert one-step t=0.25 -->
-                    <img src="./assets/INSERT_ONESTEP_0.25.png" alt="One Step Estimate t=0.25">
+                    <img src="./media/part_a/one_step_0.25.png" alt="One Step Estimate t=0.25">
                     <p class="caption">One-step estimate at <strong>t = 0.25</strong></p>
                 </div>
                 <div class="image-container">
-                    <!-- Insert one-step t=0.50 -->
-                    <img src="./assets/INSERT_ONESTEP_0.50.png" alt="One Step Estimate t=0.50">
+                    <img src="./media/part_a/one_step_0.5.png" alt="One Step Estimate t=0.50">
                     <p class="caption">One-step estimate at <strong>t = 0.50</strong></p>
                 </div>
                 <div class="image-container">
-                    <!-- Insert one-step t=0.75 -->
-                    <img src="./assets/INSERT_ONESTEP_0.75.png" alt="One Step Estimate t=0.75">
+                    <img src="./media/part_a/one_step_0.75.png" alt="One Step Estimate t=0.75">
                     <p class="caption">One-step estimate at <strong>t = 0.75</strong></p>
                 </div>
             </div>
@@ -430,23 +439,30 @@
             <!-- 1.4 -->
             <h3 style="margin-top: 40px;">1.4 Visualizing Velocity & Error Heatmaps</h3>
             <p class="description">
-                To see what the model adds, I compared the predicted step <code>(1 - t)v̂<sub>t</sub></code> against the ground-truth step <code>(1 - t)v<sub>gt</sub> = x<sub>1</sub> - x<sub>t</sub></code>. The per-pixel RMS error heatmap reveals that prediction errors peak in regions with fine, high-frequency textures and edge details.
+                To better understand how accurately the model predicts the path back to a clean image, 
+                I compared its predicted step, <code>(1 - t)v̂<sub>t</sub></code>, against the ground-truth 
+                step, <code>(1 - t)v<sub>gt</sub> = x<sub>1</sub> - x<sub>t</sub></code>. I then visualized 
+                the per-pixel root mean square (RMS) error as a heatmap to highlight where the predictions 
+                differed most from the ground truth. The results revealed larger errors around fine textures 
+                and sharp edges, suggesting that these high-frequency details are harder for the model to 
+                reconstruct accurately in a single step.
             </p>
 
-            <div class="gallery-grid">
+            <div class="image-column">
                 <div class="image-container">
-                    <!-- Insert velocity grid t=0.25 -->
-                    <img src="./assets/INSERT_VELOCITY_0.25.png" alt="Velocity Diagnostics t=0.25">
+                    <img src="./media/part_a/cs180 proj3 1.jpg" alt="Original image" class="original-image">
+                    <p class="caption original-caption">Original image</p>
+                </div>
+                <div class="image-container">
+                    <img src="./media/part_a/velocity_0.25.png" alt="Velocity Diagnostics t=0.25">
                     <p class="caption">Velocity breakdown at <strong>t = 0.25</strong></p>
                 </div>
                 <div class="image-container">
-                    <!-- Insert velocity grid t=0.50 -->
-                    <img src="./assets/INSERT_VELOCITY_0.50.png" alt="Velocity Diagnostics t=0.50">
+                    <img src="./media/part_a/velocity_0.50.png" alt="Velocity Diagnostics t=0.50">
                     <p class="caption">Velocity breakdown at <strong>t = 0.50</strong></p>
                 </div>
                 <div class="image-container">
-                    <!-- Insert velocity grid t=0.75 -->
-                    <img src="./assets/INSERT_VELOCITY_0.75.png" alt="Velocity Diagnostics t=0.75">
+                    <img src="./media/part_a/velocity_0.75.png" alt="Velocity Diagnostics t=0.75">
                     <p class="caption">Velocity breakdown at <strong>t = 0.75</strong></p>
                 </div>
             </div>
@@ -454,22 +470,45 @@
             <!-- 1.5 -->
             <h3 style="margin-top: 40px;">1.5 Iterative Denoising with Euler Integration</h3>
             <p class="description">
-                Because real probability trajectories curve in high dimensions, extrapolating in a single giant jump fails at high noise levels. Instead, we take small numerical Euler steps (<code>h = 0.02</code>), recomputing the local velocity along the trajectory. Starting at <code>t = 0.50</code>, it takes 25 steps to reach <code>t = 1.00</code>.
+                A single, large step can miss the mark, especially when starting from heavily corrupted images. 
+                This is because the path from noise to a clean image can curve through high-dimensional space, 
+                making it difficult to capture the entire journey with one straight line prediction. Instead, 
+                Euler integration takes smaller steps along the trajectory, recalculating the model’s predicted 
+                velocity at each point. With a step size of <code>h = 0.02</code>, I started at <code>t = 0.50</code> 
+                and took 25 steps to reach <code>t = 1.00</code>, allowing the image to evolve gradually toward 
+                its clean endpoint.
             </p>
 
-            <!-- Trajectory panels -->
-            <img class="large-image" src="./assets/INSERT_TRAJECTORY_PANEL.png" alt="Euler Denoising Trajectory">
+            <img class="large-image" src="./media/part_a/trajectory.png" alt="Euler Denoising Trajectory">
             <p class="caption" style="text-align: center;">Trajectory from t = 0.50 to t = 1.00 shown every 5 updates.</p>
 
-            <!-- Comparison panels -->
-            <img class="large-image" src="./assets/INSERT_COMPARISON_PANEL.png" alt="Denoising Method Comparison">
+            <img class="large-image" src="./media/part_a/comparison.png" alt="Denoising Method Comparison">
             <p class="caption" style="text-align: center;">Comparison on the same t = 0.50 input: Original vs Gaussian Blur vs One-step vs Euler Denoising.</p>
 
             <div class="reflection">
-                <h3>What I learned</h3>
+                <h3>What I learned!</h3>
                 <p>
-                    Classical filtering acts as a low-pass filter: it suppresses noise by sacrificing fine details. One-step flow extrapolation is a huge leap forward because it hallucinate coherent visual semantics, but it struggles when curvature is pronounced. Euler sampling solves this by treating generation as following an empirical vector field step-by-step.
+                    This experiment helped me understand the trade-offs between different approaches to image denoising. 
+                    Classical filtering, such as Gaussian blur, removes noise by smoothing out high-frequency information, 
+                    but this also means losing fine details and sharp edges. One-step flow prediction goes a step further. 
+                    Rather than simply smoothing pixels, it can generate more coherent visual structures, although a 
+                    single jump may struggle to follow a curved trajectory accurately. Euler sampling addresses this 
+                    limitation by breaking the journey into smaller steps, repeatedly following the model’s predicted 
+                    velocity field to guide the image toward its final form.
                 </p>
+            </div>
+
+            <!-- 1.6 -->
+            <h3 style="margin-top: 40px;">1.6 Generating Images from Noise</h3>
+            <p class="description">
+                I generated five images from independent random noise samples using the prompt “a high quality photo”, 
+                tracking each seed and applying 50 Euler steps to transform the noise into a coherent image.
+            </p>
+
+            <div class="image-row"></div>
+                <div class="image-container">
+                    <img src="./media/part_a/conditional_samples.png" alt="Conditional Samples">
+                </div>
             </div>
         </section>
 
@@ -479,7 +518,12 @@
             <h2>Conditional Generation and Guidance</h2>
 
             <p class="description">
-                Can we generate pictures from pure static noise (<code>t = 0.0</code>)? Yes, by running Euler sampling across 50 steps. However, standard sampling often produces washed-out or ambiguous faces. Classifier-Free Guidance (CFG) boosts prompt adherence by combining conditional and unconditional predictions.
+                Can a model turn pure random noise (<code>t = 0.0</code>) into a realistic image? To find out, 
+                I ran Euler sampling over 50 steps, gradually transforming random noise into an image. 
+                However, standard sampling often produced blurry or ambiguous faces, showing that generating an 
+                image is not just about removing noise, but also about how well the model follows the intended 
+                prompt. This led us to explore Classifier-Free Guidance (CFG), a technique that strengthens 
+                prompt adherence by combining predictions made with and without text conditioning.
             </p>
 
             <div class="equation">
@@ -488,36 +532,30 @@
 
             <h3>2.1 Classifier-Free Guidance (CFG) Comparisons</h3>
             <p class="description">
-                Evaluating the exact same 5 initial random noise seeds across unguided sampling (<code>w = 0</code>) and guided sampling (<code>w = 7.0</code>) with the prompt <em>"a high quality photo"</em> demonstrates how CFG carves crisp contrast, distinct features, and vivid lighting out of blurry averages.
+                To see how much guidance changes the results, I used the same five initial noise seeds 
+                to generate images under two settings: unguided sampling (w = 0) and guided sampling (w = 7.0), 
+                both with the prompt “a high quality photo”. Keeping the starting noise fixed made it easier 
+                to compare the effect of CFG. With stronger guidance, the generated images generally showed 
+                sharper contrasts, more distinct features and more vivid lighting, bringing details into 
+                focus that were less apparent in the unguided results.
             </p>
 
-            <div class="gallery-grid">
+            <div class="image-row"></div>
                 <div class="image-container">
-                    <!-- Insert Seed 1 comparison -->
-                    <img src="./assets/INSERT_CFG_SEED1.png" alt="CFG Comparison Seed 1">
-                    <p class="caption"><strong>Seed 180</strong> · Unguided (left) vs Guided w=7 (right)</p>
-                </div>
-                <div class="image-container">
-                    <!-- Insert Seed 2 comparison -->
-                    <img src="./assets/INSERT_CFG_SEED2.png" alt="CFG Comparison Seed 2">
-                    <p class="caption"><strong>Seed 181</strong> · Unguided (left) vs Guided w=7 (right)</p>
-                </div>
-                <div class="image-container">
-                    <!-- Insert Seed 3 comparison -->
-                    <img src="./assets/INSERT_CFG_SEED3.png" alt="CFG Comparison Seed 3">
-                    <p class="caption"><strong>Seed 182</strong> · Unguided (left) vs Guided w=7 (right)</p>
-                </div>
-                <div class="image-container">
-                    <!-- Insert Seed 4 comparison -->
-                    <img src="./assets/INSERT_CFG_SEED4.png" alt="CFG Comparison Seed 4">
-                    <p class="caption"><strong>Seed 183</strong> · Unguided (left) vs Guided w=7 (right)</p>
+                    <img src="./media/part_a/cfg_samples.png" alt="CFG Samples">
                 </div>
             </div>
 
             <div class="reflection">
                 <h3>The Trade-off with Guidance</h3>
                 <p>
-                    CFG is like turning up the saturation knob on the semantic concept itself. By steering away from the empty-string prediction, the vector field is forced into sharper, higher-density likelihood modes. The output loses diversity across strange compositions, but gains dramatic fidelity and sharp edges.
+                    I found it helpful to think of CFG as turning up the intensity of the model’s response to 
+                    a prompt. By steering generation away from the unconditional prediction and toward the 
+                    text-conditioned one, CFG encourages the model to produce images that align more closely 
+                    with the prompt. The trade-off is that stronger guidance can reduce variety and lead to 
+                    more pronounced visual features, sometimes at the expense of natural looking results. In 
+                    other words, guidance can make an image sharper and more faithful to the prompt, but 
+                    pushing it too far may limit the diversity of what the model produces.
                 </p>
             </div>
         </section>
@@ -528,77 +566,101 @@
             <h2>Creative Applications</h2>
 
             <p class="description">
-                Once we control the vector field through conditional Euler sampling, we can bend the trajectory to perform image-to-image editing, sketch-to-photo projection, 180° visual anagrams, and multiresolution hybrid images.
+                By guiding the model’s predicted velocity during Euler sampling, I explored how 
+                flow matching can do more than generate images from scratch. I experimented with 
+                image editing, turning rough sketches into realistic images, creating images that 
+                look different when rotated 180°, and blending images at different spatial frequencies.
             </p>
 
             <!-- 3.1 -->
             <h3>3.1 Image-to-Image Editing (SDEdit)</h3>
             <p class="description">
-                By adding noise corresponding to a starting time <code>t<sub>start</sub> &isin; [0.02, 0.04, 0.06, 0.10, 0.14, 0.25, 0.50]</code> and denoising back to <code>t = 1.0</code>, we project the image back onto the manifold of natural images. Lower <code>t<sub>start</sub></code> allows wild hallucinations, while higher <code>t<sub>start</sub></code> preserves fine details.
+                To explore image editing, I added noise to an existing image at different starting times, 
+                <code>t<sub>start</sub> &isin; [0.02, 0.04, 0.06, 0.10, 0.14, 0.25, 0.50]</code> , then 
+                used Euler sampling to denoise it back to <code>t = 1.0</code>.  This allows the model to 
+                reconstruct the image while introducing changes based on what it has learned about natural 
+                images. The starting time controls how much the result can change: lower values preserve 
+                more of the original image, while higher values introduce more noise and give the model 
+                greater freedom to generate new details.
             </p>
 
-            <img class="large-image" src="./assets/INSERT_CAMPANILE_EDIT.png" alt="Campanile SDEdit Sweep">
+            <img class="large-image" src="./media/part_a/edit_campanile.png" alt="Campanile SDEdit Sweep">
             <p class="caption" style="text-align: center;">Campanile sweep across starting times: at t=0.02, it hallucinates a generic structure; by t=0.25, the clock tower returns.</p>
 
             <div class="gallery-grid">
                 <div class="image-container">
                     <!-- Custom Image 1 edit sweep -->
-                    <img src="./assets/INSERT_TEST1_EDIT.png" alt="Custom Image 1 SDEdit">
+                    <img src="./media/part_a/edit_my_image_1.png" alt="Custom Image 1 SDEdit">
                     <p class="caption">Test Image 1 manifold projection</p>
                 </div>
                 <div class="image-container">
                     <!-- Custom Image 2 edit sweep -->
-                    <img src="./assets/INSERT_TEST2_EDIT.png" alt="Custom Image 2 SDEdit">
+                    <img src="./media/part_a/edit_my_image_2.png" alt="Custom Image 2 SDEdit">
                     <p class="caption">Test Image 2 manifold projection</p>
                 </div>
             </div>
 
             <h3>Editing Web & Hand-Drawn Images</h3>
             <p class="description">
-                Non-realistic drawings lack natural texture and shading. SDEdit bridges this gap by interpreting rough hand sketches as coarse spatial constraints and letting the flow model fill in realistic photorealistic surfaces.
+                Rough sketches and simple drawings often lack the textures, shading and details found 
+                in photographs. I explored how SDEdit could bridge this gap by using the sketch’s basic 
+                shapes and structure as a guide, while allowing the flow model to fill in realistic 
+                textures, lighting and other visual details.
             </p>
 
             <div class="gallery-grid">
                 <div class="image-container">
-                    <!-- Web image edit -->
-                    <img src="./assets/INSERT_WEB_EDIT.png" alt="Web Image Editing">
+                    <img src="./media/part_a/edit_web_image.png" alt="Web Image Editing">
                     <p class="caption">Web image projection</p>
                 </div>
                 <div class="image-container">
-                    <!-- Hand drawing 1 -->
-                    <img src="./assets/INSERT_DRAWING1_EDIT.png" alt="Hand-drawn Sketch 1">
-                    <p class="caption">Hand drawing 1: turning flat colored shapes into shaded 3D objects</p>
+                    <img src="./media/part_a/edit_drawing_1.png" alt="Hand-drawn Sketch 1">
+                    <p class="caption">Hand drawing 1: turning flat mushroom into shaded 3D cup</p>
+                </div>
+                <div class="image-container">
+                    <img src="./media/part_a/edit_drawing_2.png" alt="Hand-drawn Sketch 2">
+                    <p class="caption">Hand drawing 2: turning flat whale into shaded 3D unknown object</p>
                 </div>
             </div>
 
             <!-- 3.2 -->
             <h3 style="margin-top: 50px;">3.2 Text-Guided Image Editing</h3>
             <p class="description">
-                Instead of guiding toward a generic photo, we substitute a specific textual prompt to steer how the flow model reimagines the noised image.
+                Instead of guiding the model toward a generic photo, I provided a more specific prompt 
+                to shape how it reconstructed the noisy image. This allowed me to investigate how text 
+                guidance can change an image’s appearance while retaining elements of its original structure.
             </p>
 
             <div class="technical-row">
                 <div class="technical-box">
-                    <h3>Campanile &rarr; Rocket</h3>
-                    <p><em>"a photograph of a rocket on a launch pad"</em></p>
+                    <h3>Campanile &rarr; Corn Dog</h3>
+                    <p><em>"a photograph of a korean corn dog"</em></p>
                 </div>
                 <div class="technical-box">
-                    <h3>Custom Edit 1</h3>
-                    <p><em>"INSERT CUSTOM PROMPT 1"</em></p>
+                    <h3>Football Field &rarr; Mahjong Table</h3>
+                    <p><em>"a photograph of a mahjong table"</em></p>
                 </div>
                 <div class="technical-box">
-                    <h3>Custom Edit 2</h3>
-                    <p><em>"INSERT CUSTOM PROMPT 2"</em></p>
+                    <h3>Burgers &rarr; Fireplace</h3>
+                    <p><em>"a photograph of a fireplace"</em></p>
                 </div>
             </div>
 
-            <img class="large-image" src="./assets/INSERT_ROCKET_CAMPANILE.png" alt="Campanile to Rocket edit sweep">
-            <p class="caption" style="text-align: center;">Text-guided editing: at t=0.06 - 0.14, the Campanile retains its vertical framing while its surface transforms into a launching rocket.</p>
+            <img class="large-image" src="./media/part_a/text_edit_campanile.png" alt="Campanile to Rocket edit sweep">
+            <p class="caption" style="text-align: center;">Text-guided editing: at t=0.10, the Campanile retains its vertical framing while its surface transforms into a corn.</p>
+
+            <img class="large-image" src="./media/part_a/text_edit_my_image_1.png" alt="Campanile to Rocket edit sweep">
+            <p class="caption" style="text-align: center;">Text-guided editing: at t=0.06 - 0.25, the field retains its flat plane while its surface transforms into a Mahjong table.</p>
+
+            <img class="large-image" src="./media/part_a/text_edit_my_image_2.png" alt="Campanile to Rocket edit sweep">
+            <p class="caption" style="text-align: center;">Text-guided editing: at t=0.10 - 0.25, the Burger retains its overall layout while its surface catches on fire.</p>
 
             <!-- 3.3 -->
             <h3 style="margin-top: 50px;">3.3 Visual Anagrams (Optical Illusions)</h3>
             <p class="description">
-                To create an image that reveals two completely different scenes depending on whether it is upright or rotated 180°, we decompose the Euler step:
+                How can one image tell two completely different stories depending on how you look at it? 
+                By decomposing each Euler step, I can guide the model to generate an image that reveals 
+                one scene when upright and another when rotated 180°.
             </p>
 
             <div class="equation">
@@ -606,60 +668,50 @@
             </div>
 
             <!-- Anagram 1 -->
-            <div class="image-row">
+            <div class="image-column">
                 <div class="image-container">
-                    <img src="./assets/INSERT_ANAGRAM1_UPRIGHT.png" alt="Anagram 1 Upright">
-                    <p class="caption"><strong>Prompt 1 (Upright):</strong> INSERT PROMPT 1</p>
+                    <img src="./media/part_a/anagram_views_0.png" alt="Anagram 1">
+                    <p class="caption"><strong>Anagram 1:</strong></p>
                 </div>
                 <div class="image-container">
-                    <img src="./assets/INSERT_ANAGRAM1_FLIPPED.png" alt="Anagram 1 Flipped">
-                    <p class="caption"><strong>Prompt 2 (Rotated 180°):</strong> INSERT PROMPT 2</p>
-                </div>
-            </div>
-
-            <!-- Anagram 2 -->
-            <div class="image-row">
-                <div class="image-container">
-                    <img src="./assets/INSERT_ANAGRAM2_UPRIGHT.png" alt="Anagram 2 Upright">
-                    <p class="caption"><strong>Prompt 1 (Upright):</strong> INSERT PROMPT 3</p>
-                </div>
-                <div class="image-container">
-                    <img src="./assets/INSERT_ANAGRAM2_FLIPPED.png" alt="Anagram 2 Flipped">
-                    <p class="caption"><strong>Prompt 2 (Rotated 180°):</strong> INSERT PROMPT 4</p>
+                    <img src="./media/part_a/anagram_views_1.png" alt="Anagram 2">
+                    <p class="caption"><strong>Anagram 2</strong></p>
                 </div>
             </div>
 
             <!-- 3.4 -->
             <h3 style="margin-top: 50px;">3.4 Hybrid Images (Frequency Decomposition)</h3>
             <p class="description">
-                Adapting Project 2's classic hybrid images to flow matching: at every Euler integration step, we split the velocity fields into low and high spatial frequencies using a large Gaussian blur filter (&sigma; = 16, kernel = 265). Prompt A dictates the global silhouette seen from afar, while Prompt B governs the fine linework visible up close.
+                Building on the hybrid images from Project 2, I adapted the same idea to flow matching. 
+                At every Euler step, I split the velocity fields into low and high spatial frequencies 
+                using a large Gaussian blur (σ = 16, kernel size = 265). The result combines two 
+                perspectives: Prompt A shapes the overall silhouette, visible from afar, while Prompt B 
+                controls the finer details that emerge up close.
             </p>
 
             <div class="equation">
                 v = lowpass(v<sub>cfg</sub>(x<sub>t</sub>, t, p<sub>a</sub>)) + [ v<sub>cfg</sub>(x<sub>t</sub>, t, p<sub>b</sub>) - lowpass(v<sub>cfg</sub>(x<sub>t</sub>, t, p<sub>b</sub>)) ]
             </div>
 
-            <!-- Hybrid Pair 1 -->
             <div class="hybrid-comparison">
                 <div class="hybrid-near">
-                    <img src="./assets/INSERT_HYBRID1.png" alt="Hybrid 1 Full Size" style="width: 100%; border-radius: 12px;">
-                    <p class="caption"><strong>Near View (Full Size):</strong> INSERT PROMPT B (High Frequencies)</p>
+                    <img src="./media/part_a/hybrid_0.png" alt="Hybrid 1 Full Size" style="width: 100%; border-radius: 12px;">
+                    <p class="caption"><strong>Near View:</strong> A lithograph of dense bamboo stalks and leaves (High Frequencies)</p>
                 </div>
                 <div style="text-align: center;">
-                    <img class="hybrid-far" src="./assets/INSERT_HYBRID1.png" alt="Hybrid 1 Thumbnail">
-                    <p class="caption"><strong>Distant View</strong><br>INSERT PROMPT A (Low Frequencies)</p>
+                    <img class="hybrid-far" src="./media/part_a/hybrid_0.png" alt="Hybrid 1 Thumbnail">
+                    <p class="caption"><strong>Distant View:</strong><br> A lithograph of a giant panda face (Low Frequencies)</p>
                 </div>
             </div>
 
-            <!-- Hybrid Pair 2 -->
             <div class="hybrid-comparison">
                 <div class="hybrid-near">
-                    <img src="./assets/INSERT_HYBRID2.png" alt="Hybrid 2 Full Size" style="width: 100%; border-radius: 12px;">
-                    <p class="caption"><strong>Near View (Full Size):</strong> INSERT PROMPT B (High Frequencies)</p>
+                    <img src="./media/part_a/hybrid_1.png" alt="Hybrid 2 Full Size" style="width: 100%; border-radius: 12px;">
+                    <p class="caption"><strong>Near View (Full Size):</strong> A lithograph of frost crystals and cracked ice patterns on a window (High Frequencies)</p>
                 </div>
                 <div style="text-align: center;">
-                    <img class="hybrid-far" src="./assets/INSERT_HYBRID2.png" alt="Hybrid 2 Thumbnail">
-                    <p class="caption"><strong>Distant View</strong><br>INSERT PROMPT A (Low Frequencies)</p>
+                    <img class="hybrid-far" src="./media/part_a/hybrid_1.png" alt="Hybrid 2 Thumbnail">
+                    <p class="caption"><strong>Distant View</strong><br> A lithograph of a spider sitting in the center of a web (Low Frequencies)</p>
                 </div>
             </div>
 
@@ -667,7 +719,12 @@
             <div class="reflection">
                 <h3>Final Takeaway</h3>
                 <p>
-                    Visual anagrams and hybrid images reveal how flexible vector fields really are. Because the velocity predictions at each step are just vector arithmetic in pixel space, we can rotate them, filter their frequency bands, or average them between prompts. The flow model happily walks down these composited paths, creating images that satisfy contradictory human interpretations simultaneously.
+                    Visual anagrams and hybrid images show just how flexible vector fields can be. Since each 
+                    velocity prediction is essentially a set of numerical operations on pixels, I can rotate it, 
+                    filter its spatial frequencies, or blend predictions from different prompts. The model then 
+                    follows these modified paths to generate images that can convey two seemingly contradictory 
+                    interpretations at once. What I found particularly interesting is that creating these effects 
+                    doesn’t require changing the model itself, but just changing how its predictions are combined.
                 </p>
             </div>
         </section>

@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 3B | Flow Matching from Scratch!</title>
+
+    <style>
+        /* General Page Styling */ 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Losevka;
+            background-color: #faf8f5;
+            color: #3b3a40;
+            line-height: 1.68;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Navigation Bar */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 8%;
+            border-bottom: 1px solid #f0eae4;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #777;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        nav a:hover {
+            color: #8d7ca8;
+        }
+
+        nav .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1040px;
+            margin: auto;
+            padding: 70px 8%;
+        }
+
+        /* Project Headers */
+        .project-label {
+            color: #b28b9d;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: clamp(40px, 6.8vw, 72px);
+            font-weight: 500;
+            line-height: 1.08;
+            margin-bottom: 25px;
+            color: #2b2533;
+            letter-spacing: -0.5px;
+        }
+
+        .intro {    
+            max-width: 780px;
+            color: #6a6673;
+            font-size: 18px;
+            margin-bottom: 85px;
+            line-height: 1.7;
+        }
+
+        /* Project Sections */
+        .part {
+            margin-bottom: 120px;
+        }
+
+        .part-label {  
+            color: #8d7ca8;
+            font-size: 13px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: #332940;
+        }
+
+        h3 {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 12px;
+            color: #4a3b5c;
+        }
+
+        .description { 
+            color: #666;
+            max-width: 720px;
+            margin-bottom: 30px;
+            font-size: 15px;
+        }
+
+        /* Image Display Rows & Grids */
+        .image-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .image-column {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .image-container {
+            flex: 1;
+        }
+
+        .image-container img {
+            width: 100%;
+            display: block;
+            border-radius: 14px;
+            border: 1px solid #e8e2eb;
+            background-color: #111;
+        }
+
+        .caption { 
+            margin-top: 10px;   
+            font-size: 13px;
+            color: #888;
+            line-height: 1.4;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px 20px;
+            margin: 35px 0;
+        }
+
+        /* Large Image */
+        .large-image {
+            width: 100%;
+            max-width: 850px;
+            display: block;
+            margin: 25px auto;
+            border-radius: 16px;
+            border: 1px solid #e8e2eb;
+            background-color: #111;
+        }
+
+        .plot-image {
+            width: 100%;
+            max-width: 780px;
+            display: block;
+            margin: 25px auto;
+            border-radius: 14px;
+            border: 1px solid #e5dfe6;
+            background-color: #ffffff;
+        }
+
+        /* Formula / Equation Card */
+        .equation {
+            background-color: #f1ecf5;
+            padding: 18px 24px;
+            border-radius: 14px;
+            text-align: center;
+            color: #644b7d;
+            font-family: monospace;
+            font-size: 15px;
+            margin: 25px 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Technical Cards */
+        .technical-row {
+            display: flex;
+            gap: 20px;
+            margin: 35px 0;
+        }
+
+        .technical-box {
+            flex: 1;
+            border: 1px solid #e5dfe6;
+            background-color: #fffdfb;
+            padding: 22px;
+            border-radius: 16px;
+        }
+
+        .technical-box h3 {
+            margin-bottom: 8px;
+            color: #4a3b5c;
+        }
+
+        .technical-box p {
+            color: #777;
+            font-size: 13.5px;
+        }
+
+        /* Process Steps */
+        .process-row {
+            display: flex;
+            gap: 20px;
+            margin: 35px 0;
+        }
+
+        .process-step {
+            flex: 1;
+            background-color: #f1edf4;
+            padding: 22px;
+            border-radius: 16px;
+        }
+
+        .process-step span {
+            color: #8d7ca8;
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .process-step h3 {
+            margin-top: 6px;
+            color: #4a3b5c;
+        }
+
+        .process-step p {
+            color: #666;
+            font-size: 13px;
+        }
+
+        /* Reflection Cards */
+        .reflection {
+            background-color: #eee8f4;
+            padding: 28px;
+            border-radius: 16px;
+            margin-top: 35px;
+        }
+
+        .reflection h3 {
+            font-size: 17px;
+            font-weight: 500;
+            margin-bottom: 8px;
+            color: #4a3b5c;
+        }
+
+        .reflection p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        /* Failure / Centroid Box */
+        .failure-box {
+            background-color: #f6eeee;
+            padding: 24px;
+            border-radius: 16px;
+            margin: 30px 0;
+            border: 1px solid #eedada;
+        }
+
+        .failure-box h3 {
+            color: #7d4e4e;
+            margin-bottom: 8px;
+        }
+
+        .failure-box p {
+            color: #6a5353;
+            font-size: 13.5px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 40px;
+            font-size: 13px;
+            color: #999;
+            border-top: 1px solid #eee8f4;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .image-row,
+            .process-row,
+            .technical-row,
+            .gallery-grid {
+                flex-direction: column;
+                grid-template-columns: 1fr;
+            }
+            main {
+                padding-left: 6%;
+                padding-right: 6%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Top Navigation -->
+    <nav>
+        <a href="../index.html">← Back to Portfolio</a>
+        <div class="nav-links">
+            <span>Project 3 · Part B</span>
+            <a href="parta.html" style="color: #b28b9d;">Part A (Pretrained Models) →</a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main>
+        <!-- Header -->
+        <header>
+            <div class="project-label">CS180 · Project 03 · Part B</div>
+            <h1>Flow Matching<br>from Scratch!</h1>
+            <p class="intro">
+                Building a generative model for handwritten MNIST digits from the ground up, 
+                starting with a simple one-step denoising UNet before moving to continuous-time 
+                flow matching. Along the way, I conditioned the model on time and digit class, 
+                then used classifier-free guidance to steer the generation process toward 
+                specific digits.
+            </p>
+        </header>
+
+        <!-- Section 1 -->
+        <section class="part" id="part1">
+            <div class="part-label">Section 01</div>
+            <h2>Training a Single-Step Denoising UNet</h2>
+
+            <p class="description">
+                As a warmup before tackling continuous generative flow fields, I implemented a simple one-step denoiser. 
+                Given a noisy image <code>z = x + σ ε</code> where <code>ε ~ N(0, I)</code>, the network <code>D<sub>θ</sub></code> 
+                learns to map <code>z</code> back to the clean image <code>x</code> by optimizing an L2 objective.
+            </p>
+
+            <div class="equation">
+                L = E<sub>z, x</sub> [ || D<sub>θ</sub>(z) - x ||² ]
+            </div>
+
+            <!-- UNet Architecture Flow -->
+            <div class="process-row">
+                <div class="process-step">
+                    <span>Encoder</span>
+                    <h3>Downsampling</h3>
+                    <p>
+                        A sequence of ConvBlocks and stride-2 DownConvs contracts spatial resolution from 28×28 down to 14×14 and 7×7 while extracting increasingly abstract features.
+                    </p>
+                </div>
+
+                <div class="process-step">
+                    <span>Bottleneck</span>
+                    <h3>Flatten &amp; Unflatten</h3>
+                    <p>
+                        An AvgPool2d(7) flattens 7×7 feature maps to 1×1, followed by a ConvTranspose2d that expands them back to 7×7 for reconstruction.
+                    </p>
+                </div>
+
+                <div class="process-step">
+                    <span>Decoder</span>
+                    <h3>Skip Concatenation</h3>
+                    <p>
+                        UpBlocks double spatial dimensions while concatenating corresponding encoder features, providing direct spatial shortcuts to retain clean digit strokes.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 1.1 -->
+            <h3>1.1 Visualizing the Noising Process</h3>
+            <p class="description">
+                To observe how Gaussian noise distorts digit structures, I applied progressive noise levels 
+                <code>σ = [0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0]</code> to a set of clean test digits. As σ increases, 
+                fine handwriting details quickly dissolve into a diffuse random haze.
+            </p>
+
+            <div class="image-row">
+                <div class="image-container">
+                    <img src="./media/part_b/part1_noise_levels.png" alt="Noising Process across various sigma levels">
+                </div>
+            </div>
+            <p class="caption" style="text-align: center; margin-bottom: 40px;">
+                MNIST test digits corrupted by noise levels &sigma; = 0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0 (top to bottom).
+            </p>
+
+            <!-- 1.2.1 -->
+            <h3>1.2.1 Training the Denoiser (σ = 0.5)</h3>
+            <p class="description">
+                I trained the unconditional UNet (hidden channels <code>D = 128</code>) to denoise digits corrupted with <code>σ = 0.5</code>. 
+                Training was run for 5 epochs using the Adam optimizer with a learning rate of <code>1e-4</code> and batch size of 256. 
+                Noise was sampled dynamically in every batch so the model constantly encountered fresh noise patterns, improving generalization.
+            </p>
+
+            <img class="plot-image" src="./media/part_b/denoise_loss.png" alt="Single-step Denoiser Loss Curve">
+            <p class="caption" style="text-align: center;">Training loss curve over 5 epochs (~1172 optimizer steps), showing a steep decline from ~0.18 to below 0.01.</p>
+
+            <div class="image-row" style="margin-top: 35px;">
+                <div class="image-container">
+                    <img src="./media/part_b/denoise_epoch_1.png" alt="Denoising results after Epoch 1">
+                    <p class="caption">Epoch 1 test predictions (Top: Clean, Mid: Noisy &sigma;=0.5, Bottom: Denoised)</p>
+                </div>
+                <div class="image-container">
+                    <img src="./media/part_b/denoise_epoch_5.png" alt="Denoising results after Epoch 5">
+                    <p class="caption">Epoch 5 test predictions: fine contours and stroke connectivity are restored.</p>
+                </div>
+            </div>
+
+            <!-- 1.2.2 -->
+            <h3 style="margin-top: 40px;">1.2.2 Out-of-Distribution Noise Testing</h3>
+            <p class="description">
+                Our denoiser was trained exclusively on <code>σ = 0.5</code>. To see how it behaves when evaluated out-of-distribution, 
+                I evaluated it on test digits corrupted across the entire range <code>σ ∈ [0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0]</code>.
+            </p>
+
+            <div class="image-row">
+                <div class="image-container">
+                    <img src="./media/part_b/ood_denoise_test.png" alt="Out-of-Distribution Testing across sigmas">
+                </div>
+            </div>
+        
+            <p class="description">
+                The model generalizes well to lower noise levels and moderately higher ones, producing clean 
+                outputs for <code>σ = 0</code> to <code>0.6</code>. Notably, it still performs well at <code>σ = 0</code> and <code>0.2</code>, even though it was 
+                never trained on such lightly corrupted inputs. However, artifacts begin to emerge at <code>σ = 0.8</code>, 
+                becoming more pronounced at <code>σ = 1.0</code>, where the model starts inventing strokes. The 2 develops 
+                an extra loop, and 1 and 0 begin to resemble a 6, while 9 starts looking like a 4. Beyond the 
+                noise levels it was trained to handle, the model struggles to recover the original digits.
+            </p>
+
+            <!-- 1.2.3 -->
+            <h3 style="margin-top: 40px;">1.2.3 Denoising Pure Noise</h3>
+            <p class="description">
+                Could we turn this denoiser into a generative model by training it to denoise pure Gaussian noise <code>ε ~ N(0, I)</code> into clean digits? 
+                I trained a fresh UNet under the exact same setup (5 epochs, Adam lr=1e-4, D=128), but fed pure noise with clean digits as targets.
+            </p>
+
+            <div class="image-row">
+                <div class="image-container">
+                    <img src="./media/part_b/pure_noise_epoch_1.png" alt="Pure Noise Denoised Epoch 1">
+                    <p class="caption">Pure noise input after Epoch 1</p>
+                </div>
+                <div class="image-container">
+                    <img src="./media/part_b/pure_noise_epoch_5.png" alt="Pure Noise Denoised Epoch 5">
+                    <p class="caption">Pure noise input after Epoch 5</p>
+                </div>
+            </div>
+
+            <div class="image-row">
+                <div class="image-container">
+                    <img src="./media/part_b/denoise_pure_noise_loss.png" alt="Training Loss Plot">
+                    <p class="caption">Training loss when denoising pure noise</p>
+                </div>
+            </div>
+
+            <div class="failure-box">
+                <h3 style="margin-top: 10px;">Observed behaviour</h3>
+                <p class="description">
+                    Feeding different Gaussian noise vectors into the trained model yields nearly the exact same
+                    picture each time: an indistinct, glowing ring that seems to blend several numerals together 
+                    rather than forming any recognizable character. The model essentially strips away the specific 
+                    noise pattern and replaces it with this static shape. Visual variance between test samples is 
+                    practically nonexistent by the fifth epoch, and the training error quickly flattens out around 
+                    a steady baseline rather than dropping toward zero. This plateau closely tracks the numerical 
+                    error one gets simply by comparing every training image to the average pixel values of the 
+                    entire dataset.
+                </p>
+
+                <h3 style="margin-top: 10px;">Why this happens</h3>
+                <p class="description">
+                    As the input noise is completely random, it gives the network no clue which digit it is supposed 
+                    to draw. When using an MSE loss under complete uncertainty, the safest mathematical bet is to 
+                    output the average of all digits. Guessing a specific number like a "7" would cause a huge loss 
+                    whenever the target happens to be a "0". Instead, outputting the dataset mean minimizes the penalty 
+                    across all possibilities. This creates a hazy loop that is brightest in the center where most 
+                    strokes overlap and dark around the edges. It shows that a single denoising step cannot pick a 
+                    distinct digit from noise, which is why we need Flow Matching to build images gradually over multiple steps. 
+                </p>
+            </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="part" id="part2">
+            <div class="part-label">Section 02</div>
+            <h2>Training a Flow Matching Model</h2>
+
+            <p class="description">
+                Since one-step generation fails, we turn to <strong>Flow Matching</strong> to synthesize images iteratively. 
+                We define a straight-line continuous trajectory connecting pure noise <code>x<sub>0</sub> ~ N(0, I)</code> at <code>t = 0</code> 
+                to a clean data sample <Br> <code>x<sub>1</sub> ~ p<sub>data</sub></code> at <code>t = 1</code>:
+            </p>
+
+            <div class="equation">
+                x<sub>t</sub> = (1 - t) x<sub>0</sub> + t x<sub>1</sub>, &emsp; u(x<sub>t</sub>, t) = dx<sub>t</sub> / dt = x<sub>1</sub> - x<sub>0</sub>
+            </div>
+
+            <p class="description">
+                The UNet <code>u<sub>θ</sub>(x<sub>t</sub>, t)</code> is trained via standard regression to predict this constant velocity vector field:
+            </p>
+
+            <div class="equation">
+                L<sub>FM</sub> = E<sub>x<sub>0</sub>, x<sub>1</sub>, t</sub> [ || (x<sub>1</sub> - x<sub>0</sub>) - u<sub>θ</sub>(x<sub>t</sub>, t) ||² ]
+            </div>
+
+            <!-- Technical details -->
+            <div class="technical-row">
+                <div class="technical-box">
+                    <h3>FCBlock Conditioning</h3>
+                    <p>
+                        Timestep <code>t</code> is mapped through a 2-layer MLP (<code>FCBlock</code>) to modulate channel features at the bottleneck and first upsampling block.
+                    </p>
+                </div>
+
+                <div class="technical-box">
+                    <h3>Euler Integration</h3>
+                    <p>
+                        At inference, we start from random noise <code>x<sub>0</sub></code> and numerically integrate along the predicted velocity field: <Br> <code>x &larr; x + v &middot; &Delta;t</code>.
+                    </p>
+                </div>
+
+                <div class="technical-box">
+                    <h3>Optimization Schedule</h3>
+                    <p>
+                        Base hidden dimension <code>D = 64</code>, initial learning rate <code>1e-2</code> decayed exponentially by <code>γ = 0.1<sup>1/10</sup></code> per epoch over 10 epochs.
+                    </p>
+                </div>
+            </div>
+
+            <!-- 2.1 - 2.2 -->
+            <h3 style="margin-top: 40px;">2.1 – 2.2 Time-Conditioned Flow Matching</h3>
+            <p class="description">
+                I trained a time-conditioned UNet (Algorithm B.1) and sampled from it using 50 Euler integration steps (Algorithm B.2) 
+                across epochs 1, 5, and 10. Without class guidance, the model learns to turn random noise into diverse, plausible handwritten digits.
+            </p>
+
+            <img class="plot-image" src="./media/part_b/time_loss.png" alt="Time-conditioned Training Loss Curve">
+            <p class="caption" style="text-align: center;">Training loss curve for the time-conditioned UNet across 10 epochs.</p>
+
+            <p class="description">
+            <Br>Across the final 100 steps of each epoch, the mean training loss steadily declined from 0.133 
+                following the first epoch to 0.093 at epoch 10.
+            </p>
+
+            <!-- 2.3 -->
+            <h3 style="margin-top: 40px;">2.3 Sampling from the Time-conditioned UNet</h3>
+
+            <p class="description">
+                Generated from pure Gaussian noise, each grid tracks 40 samples integrated over Euler steps 
+                from <code>t = 0</code> to <code>1</code>. Using a fixed seed and identical initial noise 
+                ensures that the visual progression across checkpoints reflects only the evolution of the 
+                network weights. 
+            </p>
+            
+            <div class="image-row" style="margin-top: 30px;">
+                <div class="image-container">
+                    <img src="./media/part_b/time_epoch_1.png" alt="Time conditioned samples Epoch 1">
+                    <p class="caption">Epoch 1 samples: blurry stroke skeletons emerge from noise.</p>
+                </div>
+                <div class="image-container">
+                    <img src="./media/part_b/time_epoch_5.png" alt="Time conditioned samples Epoch 5">
+                    <p class="caption">Epoch 5 samples: digit topologies become relatively more well-defined.</p>
+                </div>
+            </div>
+
+            <img class="large-image" src="./media/part_b/time_epoch_10_final.png" alt="Time-conditioned Epoch 10 Final Grid">
+            <p class="caption" style="text-align: center;">Time-conditioned MNIST generation after 10 epochs (50 Euler steps). 
+                Recognizable numerals clearly emerge, though several remain imperfect with broken loops, extraneous tails or 
+                ambiguous contours.
+            </p>
+
+            <!-- 2.4 - 2.5 -->
+            <section class="part" id="part2_4_5">
+                <h3 style="margin-top: 40px;">2.4 – 2.5 Class-Conditioned UNet &amp; Training Pipeline</h3>    
+                <p class="description">
+                    While the time-conditioned model synthesizes plausible handwritten strokes, it lacks deterministic control over digit identity. To direct synthesis toward a specific numeral, I conditioned the UNet on the digit class <code>c &isin; {0, &hellip;, 9}</code>, represented as a 10-dimensional one-hot vector.
+                </p>
+    
+                <div class="technical-row">
+                    <div class="technical-box">
+                        <h3>One-Hot Conditioning</h3>
+                        <p>
+                            The integer label is mapped to a 10-dimensional one-hot vector <code>c</code> and embedded through two independent <code>FCBlock</code> networks to match feature channel dimensions.
+                        </p>
+                    </div>
+    
+                    <div class="technical-box">
+                        <h3>Affine Feature Modulation</h3>
+                        <p>
+                            Conditioning vectors modulate intermediate activations at both the bottleneck and the first upsampling decoder stage via channel-wise scaling and shifting.
+                        </p>
+                    </div>
+    
+                    <div class="technical-box">
+                        <h3>Conditioning Dropout</h3>
+                        <p>
+                            With probability <code>p<sub>uncond</sub> = 0.1</code>, class vectors are dropped to zero during training, enabling the network to learn conditional and unconditional vector fields simultaneously.
+                        </p>
+                    </div>
+                </div>
+    
+                <h3>Feature Modulation Formulation</h3>
+                <p class="description">
+                    Conditioning signals are injected by scaling the convolutional features with class embedding vectors <code>c<sub>1</sub>, c<sub>2</sub></code> and shifting them with time embeddings <code>t<sub>1</sub>, t<sub>2</sub></code>:
+                </p>
+    
+                <div class="equation">
+                    unflatten = c<sub>1</sub> &odot; unflatten + t<sub>1</sub>, &emsp; up<sub>1</sub> = c<sub>2</sub> &odot; up<sub>1</sub> + t<sub>2</sub>
+                </div>
+    
+                <p class="description">
+                    Training followed Algorithm B.3 over 10 epochs using a batch size of 64 and the Adam optimizer with an initial learning rate of <code>1e-2</code>, decayed per epoch by <code>&gamma; = 0.1<sup>1/10</sup></code>.
+                </p>
+    
+                <img class="plot-image" src="./media/part_b/class_loss.png" alt="Class-conditioned Training Loss Curve">
+                <p class="caption" style="text-align: center;">Training loss curve over 10 epochs (~9,375 optimizer steps). Loss drops sharply within the first 200 steps and stabilizes around 0.08.</p>
+    
+                <div class="reflection">
+                    <h3>Training Dynamics &amp; Observations</h3>
+                    <p>
+                        Integrating class labels altered the optimization landscape noticeably compared to time-only training. Because the network receives explicit categorical information, it no longer has to resolve the ambiguity of multiple digits competing for the same starting noise. The initial loss dropped from ~1.58 down to ~0.15 in under 200 iterations, converging more rapidly to a lower final loss (~0.08) than the unconditional counterpart.
+                    </p>
+                </div>
+            </section>
+    
+            <!-- 2.6  -->
+            <section class="part" id="part2_6">
+                <h3 style="margin-top: 40px;">2.6 Sampling with Classifier-Free Guidance &amp; Ablation</h3>
+    
+                <p class="description">
+                    To sample from the model, we numerically integrate from pure Gaussian noise at <code>t = 0</code> to clean images at <code>t = 1</code> using 300 Euler steps. To amplify the class signal and clean up background haze, we apply <strong>Classifier-Free Guidance (CFG)</strong> with scale <code>&gamma; = 5.0</code>.
+                </p>
+    
+                <div class="equation">
+                    v = v<sub>u</sub> + &gamma; (v<sub>c</sub> - v<sub>u</sub>)
+                </div>
+    
+                <p class="description">
+                    At each step, the UNet computes both the conditioned flow <code>v<sub>c</sub></code> and the unconditioned flow <code>v<sub>u</sub></code> (evaluated by masking out the class vector). Extrapolating along their difference pushes intermediate latents toward high-density regions of the target class distribution.
+                </p>
+    
+                <!-- Checkpoints Grid -->
+                <h3>Sampling Evolution Across Epochs</h3>
+                <p class="description">
+                    Evaluating the model across training checkpoints highlights how quickly class boundaries form under guidance. Four instances were generated for each digit 0 through 9 using fixed random seeds.
+                </p>
+    
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="./media/part_b/class_epoch_1.png" alt="Class-conditioned samples after Epoch 1">
+                        <p class="caption"><strong>Epoch 1 Checkpoint:</strong> Coarse digit topologies are already assigned 
+                            to their correct columns, though stroke edges remain ragged and noisy.
+                        </p>
+                    </div>
+                    <div class="image-container">
+                        <img src="./media/part_b/class_epoch_5.png" alt="Class-conditioned samples after Epoch 5">
+                        <p class="caption"><strong>Epoch 5 Checkpoint:</strong> Strokes become solid and continuous; 
+                            background noise is eliminated across all digit categories.
+                        </p>
+                    </div>
+                </div>
+    
+                <img class="large-image" src="./media/part_b/class_epoch_10_final.png" alt="Final Class-Conditioned Samples (With Scheduler, Epoch 10)">
+                <p class="caption" style="text-align: center;"><strong>Final Class-Conditioned Generation (Epoch 10, With Scheduler):</strong> 
+                    Exactly four distinct variations per digit (columns 0 through 9). Stroke widths are uniform, curves are smooth and 
+                    digit identities are unambiguous.
+                </p>
+    
+                <!-- No-Scheduler Ablation -->
+                <h3 style="margin-top: 50px;">Ablation: Removing the Learning Rate Scheduler</h3>
+                <p class="description">
+                    Can we train this model without a decaying learning rate schedule? When keeping the default initial learning rate of <code>1e-2</code> constant throughout training, large late-stage gradient updates cause the weights to oscillate around the minimum, degrading stroke smoothness. 
+                    <br><br>
+                    To eliminate the scheduler while preserving stability, I trained an independent model using a <strong>constant learning rate of 1e-3</strong> with the Adam optimizer over the same 10 epochs.
+                </p>
+    
+                <img class="plot-image" src="./media/part_b/class_no_sched_loss.png" alt="No-Scheduler Training Loss Curve">
+                <p class="caption" style="text-align: center;">Training loss curve using a constant learning rate of 1e-3. 
+                    The trajectory descends smoothly without instability, flattening near ~0.09.
+                </p>
+    
+                <div class="image-row" style="margin-top: 30px;">
+                    <div class="image-container">
+                        <img src="./media/part_b/class_no_sched_epoch_1.png" alt="No-Scheduler samples Epoch 1">
+                        <p class="caption"><strong>No-Scheduler Epoch 1:</strong> Slightly softer stroke edges than the 
+                            1e-2 schedule due to conservative early updates.
+                        </p>
+                    </div>
+                    <div class="image-container">
+                        <img src="./media/part_b/class_no_sched_epoch_5.png" alt="No-Scheduler samples Epoch 5">
+                        <p class="caption"><strong>No-Scheduler Epoch 5:</strong> Clean, high-fidelity digit outlines 
+                            emerge across all columns.
+                        </p>
+                    </div>
+                </div>
+    
+                <img class="large-image" src="./media/part_b/class_no_sched_epoch_10_final.png" alt="Final Class-Conditioned Samples (No Scheduler, Epoch 10)">
+                <p class="caption" style="text-align: center;"><strong>Final Class-Conditioned Generation (No Scheduler, lr = 1e-3):</strong> Generated digits show crisp contrast and proper topological separation across all 10 classes, confirming that careful tuning of a constant learning rate can replace decay schedules without sacrificing sample quality.</p>
+    
+                <div class="reflection">
+                    <h3>Comparative Analysis &amp; Takeaways</h3>
+                    <p>
+                        <strong>1. Resolution of Multi-Modal Ambiguity:</strong> Unlike the time-only model in Section 2.3, which occasionally produced hybrid digits (e.g., an ambiguous cross between a 3 and a 5), the class-conditioned network exhibits zero class confusion. Every single generated sample strictly adheres to its target column identity.
+                        <br><br>
+                        <strong>2. The Impact of Guidance Scale (&gamma; = 5.0):</strong> Classifier-Free Guidance acts as an edge-sharpening contrast operator in vector space. Because the vector difference <code>(v<sub>c</sub> - v<sub>u</sub>)</code> points directly away from unconditioned average strokes toward high-probability class modes, scaling it by 5.0 suppresses off-stroke haze and tightens stroke thickness.
+                        <br><br>
+                        <strong>3. Optimizer Dynamics (Constant vs. Decaying LR):</strong> The decaying schedule (<code>1e-2 &rarr; 1e-3</code>) converges slightly faster in the first two epochs because large early steps quickly orient the global flow field. However, adopting a uniform <code>1e-3</code> rate achieves identical final perceptual quality by epoch 10, removing scheduler complexity with negligible computational trade-off.
+                    </p>
+                </div>
+            </section>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        CS180 (Intro to Computer Vision and Computational Photography) · UC Berkeley
+    </footer>
+</body>
+</html>
